@@ -140,6 +140,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .bank-notif-label{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:2px}
 .bank-notif-amount{font-size:26px;font-weight:700;color:var(--red);font-family:'IBM Plex Mono',monospace;line-height:1}
 .bank-notif-sub{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-top:3px}
+/* QUICK ADD FAB */
+.quick-fab{position:fixed;bottom:24px;right:20px;z-index:400;background:var(--accent);color:#0D0D0F;border:none;border-radius:50px;padding:13px 20px;font-size:14px;font-weight:700;font-family:'IBM Plex Sans Arabic',sans-serif;cursor:pointer;box-shadow:0 4px 20px rgba(200,241,53,0.4);display:flex;align-items:center;gap:7px;transition:transform 0.15s,box-shadow 0.15s}
+.quick-fab:active{transform:scale(0.95);box-shadow:0 2px 10px rgba(200,241,53,0.3)}
 /* EXPORT */
 .export-wrap{padding:16px}
 .export-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-bottom:12px}
@@ -606,6 +609,11 @@ optgroup{background:var(--card);color:var(--muted);font-size:12px}option{backgro
   </div>
 </div>
 
+<!-- QUICK ADD FAB BUTTON -->
+<button class="quick-fab" id="quickFab" onclick="openQuickAddDirect()" style="display:none">
+  💳 Quick Add
+</button>
+
 <!-- QUICK ADD FROM BANK NOTIFICATION -->
 <div class="quick-modal-overlay" id="quickAddModal" onclick="closeQuickModal(event)">
   <div class="quick-modal">
@@ -805,6 +813,7 @@ function showApp(){
   }
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('appWrap').style.display='block';
+  document.getElementById('quickFab').style.display='flex';
   document.getElementById('expDate').value=new Date().toISOString().split('T')[0];
   document.getElementById('topbarMonth').textContent=formatMonth(getCurrentMonth());
   // Show username in topbar
@@ -1707,6 +1716,16 @@ function saveAdminPrefs(){
 }
 
 // ── QUICK ADD FROM BANK ──────────────────────────────────────
+function openQuickAddDirect(){
+  document.getElementById('quickAmount').value='';
+  document.getElementById('quickAmountDisplay').textContent='— SAR';
+  document.getElementById('quickPayDisplay').textContent='Al Rajhi Bank';
+  document.getElementById('quickPay').value='RAJ';
+  document.getElementById('quickDesc').value='';
+  document.getElementById('quickDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('quickCat').value='';
+  document.getElementById('quickAddModal').classList.add('open');
+}
 function openQuickAddModal(params){
   const amount=parseFloat(params.get('amount'))||0;
   const pay=params.get('pay')||'RAJ';
@@ -1758,6 +1777,7 @@ function logout(){
   sessionStorage.removeItem('ksa_role');
   currentUser=null;
   document.getElementById('appWrap').style.display='none';
+  document.getElementById('quickFab').style.display='none';
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('loginUser').value='';
   document.getElementById('loginPass').value='';
